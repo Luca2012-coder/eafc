@@ -5,7 +5,7 @@ import random
 # --- Spelersdata met werkende Imgur-afbeeldingen ---
 spelers_data = [
     {"naam": "Lionel Messi", "club": "PSG", "rating": 93, "type": "Gold Rare",
-     "afbeelding": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FLionel_Messi&psig=AOvVaw0zETK9H6ffQLocCmuM_N6g&ust=1749718764550000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLDv97yA6Y0DFQAAAAAdAAAAABAE"},
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg/250px-Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg"},
     {"naam": "Cristiano Ronaldo", "club": "Manchester United", "rating": 92, "type": "Gold Rare",
      "afbeelding": "https://i.imgur.com/W47v6xF.png"},
     {"naam": "Erling Haaland", "club": "Manchester City", "rating": 88, "type": "Gold",
