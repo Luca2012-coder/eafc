@@ -86,7 +86,7 @@ if st.sidebar.button("Koop & Open Pack"):
             random_state=random.randint(1, 10000),
         )
 
-        def kans_tots(rating, max_rating, base_kans=0.05):
+        def kans_tots(rating, max_rating, base_kans=1.0):
             factor = (max_rating + 3 - rating) / (max_rating + 3)
             return base_kans * factor
 
