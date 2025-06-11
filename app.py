@@ -128,3 +128,6 @@ if st.button("📦 Bekijk mijn gepackte spelers"):
             st.write(f"⭐ {speler['rating']} - {speler['naam']} ({speler['club']}) - {speler['type']}")
         if pd.notna(speler["afbeelding"]):
             st.image(speler["afbeelding"], width=100)
+if st.button("🗑️ Reset mijn collectie"):
+    st.session_state.gepackte_spelers = {}
+    st.success("Je collectie is succesvol gereset!")
