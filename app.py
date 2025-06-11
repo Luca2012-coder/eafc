@@ -2,41 +2,53 @@ import streamlit as st
 import pandas as pd
 import random
 
-# SPELERSDATA direct in de code (geen extern CSV nodig)
-@st.cache_data
-def load_spelers():
-    data = {
-        "naam": ["Mbappe", "Messi", "Ronaldo", "Bellingham", "Haaland", "De Bruyne"],
-        "rating": [91, 90, 88, 86, 91, 91],
-        "club": ["PSG", "Inter Miami", "Al Nassr", "Real Madrid", "Manchester City", "Manchester City"],
-        "positie": ["ST", "RW", "ST", "CM", "ST", "CM"],
-        "type": ["Gold Rare", "Gold Rare", "Gold Rare", "Gold", "Gold Rare", "Gold Rare"],
-        "afbeelding": [
-            "https://cdn.sofifa.net/players/231/747/24_120.png",
-            "https://cdn.sofifa.net/players/158/023/24_120.png",
-            "https://cdn.sofifa.net/players/020/801/24_120.png",
-            "https://cdn.sofifa.net/players/243/812/24_120.png",
-            "https://cdn.sofifa.net/players/239/085/24_120.png",
-            "https://cdn.sofifa.net/players/192/985/24_120.png"
-        ]
-    }
-    return pd.DataFrame(data)
+# --- Spelersdata direct in de app.py (voorbeeld met meer spelers) ---
+spelers_data = [
+    {"naam": "Lionel Messi", "club": "PSG", "rating": 93, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/158/023/22_60.png"},
+    {"naam": "Cristiano Ronaldo", "club": "Manchester United", "rating": 92, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/208/01/22_60.png"},
+    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 88, "type": "Gold", "afbeelding": "https://cdn.sofifa.org/players/246/741/22_60.png"},
+    {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/231/747/22_60.png"},
+    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/192/985/22_60.png"},
+    {"naam": "Neymar Jr", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/190/871/22_60.png"},
+    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/188/545/22_60.png"},
+    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/203/376/22_60.png"},
+    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold", "afbeelding": "https://cdn.sofifa.org/players/189/657/22_60.png"},
+    {"naam": "Sergio Ramos", "club": "PSG", "rating": 86, "type": "Gold", "afbeelding": "https://cdn.sofifa.org/players/189/561/22_60.png"},
+    # Meer spelers toevoegen is hetzelfde patroon
+]
 
-# Laden van spelersdata
-spelers_df = load_spelers()
+spelers_df = pd.DataFrame(spelers_data)
 
-# MUNTEN bijhouden in sessiestate
+# --- Coins in sessie ---
 if "coins" not in st.session_state:
-    st.session_state.coins = 1000  # Start met 1000 coins
+    st.session_state.coins = 1000
 
-# TITEL
+# --- Titel ---
 st.title("🎮 EAFC Pack Opening Game")
 
-# SHOP (sidebar)
+# --- Sidebar: Coins & Minigame ---
 st.sidebar.title("🛒 Shop")
 st.sidebar.write(f"💰 Coins: {st.session_state.coins}")
 
-# PACK TYPES met prijzen, aantal kaarten en toegestane types
+st.sidebar.markdown("---")
+st.sidebar.subheader("🎲 Minigame: Kop of Munt")
+
+if "message" not in st.session_state:
+    st.session_state.message = ""
+
+keuze = st.sidebar.radio("Kies Kop of Munt:", ["Kop", "Munt"])
+if st.sidebar.button("Speel"):
+    uitkomst = random.choice(["Kop", "Munt"])
+    if keuze == uitkomst:
+        winst = 200
+        st.session_state.coins += winst
+        st.session_state.message = f"🎉 Je had {uitkomst}! Je wint {winst} coins!"
+    else:
+        st.session_state.message = f"😢 Het was {uitkomst}. Probeer het nog eens!"
+
+st.sidebar.write(st.session_state.message)
+
+# --- Packs ---
 pack_types = {
     "Gold Pack (500)": {"prijs": 500, "aantal": 3, "types": ["Gold", "Gold Rare"]},
     "Rare Pack (1000)": {"prijs": 1000, "aantal": 5, "types": ["Gold Rare", "Inform", "Icon"]},
@@ -44,16 +56,12 @@ pack_types = {
 
 pack_naam = st.sidebar.selectbox("Kies een pack", list(pack_types.keys()))
 
-# Pack openen
 if st.sidebar.button("Koop & Open Pack"):
     prijs = pack_types[pack_naam]["prijs"]
     if st.session_state.coins >= prijs:
         st.session_state.coins -= prijs
         opties = spelers_df[spelers_df["type"].isin(pack_types[pack_naam]["types"])]
-
-        # Pak willekeurig aantal spelers
         gekozen = opties.sample(pack_types[pack_naam]["aantal"])
-
         st.subheader("🎁 Je pack bevat:")
         for _, speler in gekozen.iterrows():
             st.write(f"⭐ {speler['rating']} - {speler['naam']} ({speler['club']}) - {speler['type']}")
@@ -61,4 +69,3 @@ if st.sidebar.button("Koop & Open Pack"):
                 st.image(speler['afbeelding'], width=150)
     else:
         st.error("Niet genoeg coins!")
-
