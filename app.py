@@ -2,29 +2,29 @@ import streamlit as st
 import pandas as pd
 import random
 
-# --- Spelersdata met openbare, betrouwbare afbeelding URL's ---
+# --- Spelersdata met werkende Imgur-afbeeldingen ---
 spelers_data = [
     {"naam": "Lionel Messi", "club": "PSG", "rating": 93, "type": "Gold Rare",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/89/Lionel_Messi_20180626.jpg"},
+     "afbeelding": "https://i.imgur.com/Q9hTZ2G.png"},
     {"naam": "Cristiano Ronaldo", "club": "Manchester United", "rating": 92, "type": "Gold Rare",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"},
+     "afbeelding": "https://i.imgur.com/W47v6xF.png"},
     {"naam": "Erling Haaland", "club": "Manchester City", "rating": 88, "type": "Gold",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Erling_Haaland_2022.jpg"},
+     "afbeelding": "https://i.imgur.com/J4qGnL0.png"},
     {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Kylian_Mbapp%C3%A9_2021.jpg"},
+     "afbeelding": "https://i.imgur.com/H8L6HOn.png"},
     {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Kevin_De_Bruyne_201807091.jpg"},
+     "afbeelding": "https://i.imgur.com/jqHKP8c.png"},
     {"naam": "Neymar Jr", "club": "PSG", "rating": 91, "type": "Gold Rare",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Neymar_2018.jpg"},
+     "afbeelding": "https://i.imgur.com/9AZ9GwT.png"},
     {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Robert_Lewandowski_2020.jpg"},
+     "afbeelding": "https://i.imgur.com/tcrMEhe.png"},
     {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Mohamed_Salah_2020.jpg"},
+     "afbeelding": "https://i.imgur.com/uj7YZL6.png"},
     {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Luka_Modrić_2018.jpg"},
+     "afbeelding": "https://i.imgur.com/3Z7D6Wu.png"},
     {"naam": "Sergio Ramos", "club": "PSG", "rating": 86, "type": "Gold",
-     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Sergio_Ramos_2019.jpg"},
-    # Voeg gerust meer spelers toe in dit formaat
+     "afbeelding": "https://i.imgur.com/L7db5Vv.png"},
+    # Je kan hier nog meer spelers toevoegen als je wilt
 ]
 
 spelers_df = pd.DataFrame(spelers_data)
