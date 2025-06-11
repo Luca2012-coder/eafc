@@ -68,7 +68,7 @@ pack_types = {
 pack_naam = st.sidebar.selectbox("Kies een pack", list(pack_types.keys()))
 
 # --- Kans op TOTS ---
-TOTS_KANS = 0.05  # 5% kans
+TOTS_KANS = 1.0  # 5% kans
 
 if st.sidebar.button("Koop & Open Pack"):
     prijs = pack_types[pack_naam]["prijs"]
