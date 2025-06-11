@@ -131,3 +131,37 @@ if st.button("📦 Bekijk mijn gepackte spelers"):
 if st.button("🗑️ Reset mijn collectie"):
     st.session_state.gepackte_spelers = {}
     st.success("Je collectie is succesvol gereset!")
+# Unieke ID-functie opnieuw gebruiken zoals eerder
+def get_unieke_id(speler, is_tots):
+    return f"{speler['naam']}_TOTS" if is_tots else speler['naam']
+
+# Verzamel alle unieke mogelijke kaarten (gewone + TOTS)
+alle_ids = []
+for _, speler in spelers_df.iterrows():
+    normale_id = get_unieke_id(speler, False)
+    tots_id = get_unieke_id(speler, True)
+    alle_ids.extend([normale_id, tots_id])
+
+# Wat heb je al?
+gepackt_ids = set(st.session_state.gepackte_spelers.keys())
+
+# Wat mis je nog?
+nog_te_packen = sorted(set(alle_ids) - gepackt_ids)
+
+# Aantal tonen
+st.markdown("---")
+st.subheader("📊 Verzameling voortgang")
+totaal = len(set(alle_ids))
+gehaald = len(gepackt_ids)
+st.write(f"✅ Je hebt {gehaald} van de {totaal} unieke kaarten gepackt.")
+st.write(f"📉 Je mist nog {totaal - gehaald} kaarten.")
+
+# Lijst met nog te packen namen tonen
+if nog_te_packen:
+    with st.expander("👀 Bekijk nog te packen spelers"):
+        for speler_id in nog_te_packen:
+            if speler_id.endswith("_TOTS"):
+                naam = speler_id.replace("_TOTS", "")
+                st.markdown(f"<span style='color:blue;'>{naam} (TOTS)</span>", unsafe_allow_html=True)
+            else:
+                st.write(speler_id)
