@@ -70,8 +70,22 @@ if st.sidebar.button("Koop & Open Pack"):
     prijs = pack_types[pack_naam]["prijs"]
     if st.session_state.coins >= prijs:
         st.session_state.coins -= prijs
-        opties = spelers_df[spelers_df["type"].isin(pack_types[pack_naam]["types"])]
-        gekozen = opties.sample(pack_types[pack_naam]["aantal"])
+        opties = spelers_df[spelers_df["type"].isin(pack_types[pack_naam]["types"])].copy()
+
+        max_rating = opties["rating"].max()
+        # Gewicht = hoe lager rating, hoe hoger gewicht (dus vaker gekozen)
+        opties["gewicht"] = max_rating - opties["rating"] + 1
+
+        # Optioneel: versterk het effect, bv kwadraat
+        # opties["gewicht"] = opties["gewicht"] ** 2
+
+        gekozen = opties.sample(
+            n=pack_types[pack_naam]["aantal"],
+            weights=opties["gewicht"],
+            replace=False,
+            random_state=random.randint(1, 10000),
+        )
+
         st.subheader("🎁 Je pack bevat:")
         for _, speler in gekozen.iterrows():
             st.write(f"⭐ {speler['rating']} - {speler['naam']} ({speler['club']}) - {speler['type']}")
@@ -79,3 +93,4 @@ if st.sidebar.button("Koop & Open Pack"):
                 st.image(speler['afbeelding'], width=150)
     else:
         st.error("Niet genoeg coins!")
+
