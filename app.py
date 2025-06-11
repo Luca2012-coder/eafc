@@ -5,7 +5,8 @@ import random
 # DATA INLADEN
 @st.cache_data
 def load_spelers():
-    return pd.read_csv("spelers.csv")
+    return pd.read_csv("spelers.csv", encoding="utf-8-sig")
+
 
 spelers_df = load_spelers()
 
