@@ -68,7 +68,7 @@ pack_types = {
 pack_naam = st.sidebar.selectbox("Kies een pack", list(pack_types.keys()))
 
 # --- Kans op TOTS ---
-TOTS_KANS = 1.0  # 5% kans
+TOTS_KANS = 100.0  # 5% kans
 
 if st.sidebar.button("Koop & Open Pack"):
     prijs = pack_types[pack_naam]["prijs"]
@@ -86,7 +86,7 @@ if st.sidebar.button("Koop & Open Pack"):
             random_state=random.randint(1, 10000),
         )
 
-        def kans_tots(rating, max_rating, base_kans=1.0):
+        def kans_tots(rating, max_rating, base_kans=100.0):
             factor = (max_rating + 3 - rating) / (max_rating + 3)
             return base_kans * factor
 
