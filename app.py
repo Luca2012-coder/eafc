@@ -67,7 +67,7 @@ pack_types = {
     "Rare Pack (1000)": {"prijs": 1000, "aantal": 5, "types": ["Gold Rare"]},
 }
 
-TOTS_KANS = 10.0  # 5% kans op TOTS
+TOTS_KANS = 0.1  # 5% kans op TOTS
 
 pack_naam = st.sidebar.selectbox("Kies een pack", list(pack_types.keys()))
 
