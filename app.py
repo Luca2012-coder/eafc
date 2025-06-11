@@ -27,6 +27,9 @@ spelers_data = [
 ]    # Je kan hier nog meer spelers toevoegen als je wilt
 spelers_df = pd.DataFrame(spelers_data)
 
+if "gepackte_spelers" not in st.session_state:
+    st.session_state.gepackte_spelers = {}
+
 # --- Init sessie ---
 if "coins" not in st.session_state:
     st.session_state.coins = 1000
