@@ -2,19 +2,29 @@ import streamlit as st
 import pandas as pd
 import random
 
-# --- Spelersdata direct in de app.py (voorbeeld met meer spelers) ---
+# --- Spelersdata met openbare, betrouwbare afbeelding URL's ---
 spelers_data = [
-    {"naam": "Lionel Messi", "club": "PSG", "rating": 93, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/158/023/22_60.png"},
-    {"naam": "Cristiano Ronaldo", "club": "Manchester United", "rating": 92, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/208/01/22_60.png"},
-    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 88, "type": "Gold", "afbeelding": "https://cdn.sofifa.org/players/246/741/22_60.png"},
-    {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/231/747/22_60.png"},
-    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/192/985/22_60.png"},
-    {"naam": "Neymar Jr", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/190/871/22_60.png"},
-    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/188/545/22_60.png"},
-    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare", "afbeelding": "https://cdn.sofifa.org/players/203/376/22_60.png"},
-    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold", "afbeelding": "https://cdn.sofifa.org/players/189/657/22_60.png"},
-    {"naam": "Sergio Ramos", "club": "PSG", "rating": 86, "type": "Gold", "afbeelding": "https://cdn.sofifa.org/players/189/561/22_60.png"},
-    # Meer spelers toevoegen is hetzelfde patroon
+    {"naam": "Lionel Messi", "club": "PSG", "rating": 93, "type": "Gold Rare",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/89/Lionel_Messi_20180626.jpg"},
+    {"naam": "Cristiano Ronaldo", "club": "Manchester United", "rating": 92, "type": "Gold Rare",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"},
+    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 88, "type": "Gold",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Erling_Haaland_2022.jpg"},
+    {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Kylian_Mbapp%C3%A9_2021.jpg"},
+    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Kevin_De_Bruyne_201807091.jpg"},
+    {"naam": "Neymar Jr", "club": "PSG", "rating": 91, "type": "Gold Rare",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Neymar_2018.jpg"},
+    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Robert_Lewandowski_2020.jpg"},
+    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Mohamed_Salah_2020.jpg"},
+    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Luka_Modrić_2018.jpg"},
+    {"naam": "Sergio Ramos", "club": "PSG", "rating": 86, "type": "Gold",
+     "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Sergio_Ramos_2019.jpg"},
+    # Voeg gerust meer spelers toe in dit formaat
 ]
 
 spelers_df = pd.DataFrame(spelers_data)
