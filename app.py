@@ -4,18 +4,40 @@ import random
 
 # --- Spelersdata met echte afbeeldingen ---
 spelers_data = [
-    {"naam": "Lionel Messi", "club": "Inter Miami", "rating": 93, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Leo_Messi_WC2022.jpg"},
-    {"naam": "Cristiano Ronaldo", "club": "Al Nassr", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"},
-    {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Kylian_Mbapp%C3%A9_2019.jpg"},
-    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Erling_Haaland_2023.jpg"},
-    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Kevin_De_Bruyne_201807091.jpg"},
-    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/58/Luka_Modri%C4%87_2018.jpg"},
-    {"naam": "Sergio Ramos", "club": "Sevilla", "rating": 86, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/3/37/Sergio_Ramos_2017.jpg"},
-    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/4/40/Mohamed_Salah_2018.jpg"},
-    {"naam": "Neymar Jr", "club": "Al Hilal", "rating": 89, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Neymar_2018.jpg"},
-    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/57/Robert_Lewandowski_2019.jpg"},
-    # Voeg hier extra spelers toe...
+    {"naam": "Lionel Messi", "club": "Inter Miami", "rating": 93, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/89/Lionel_Messi_20180626.jpg"},
+    {"naam": "Cristiano Ronaldo", "club": "Al-Nassr", "rating": 92, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"},
+    {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Kylian_Mbapp%C3%A9_2019.jpg"},
+    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/55/Erling_Haaland_2021.jpg"},
+    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Kevin_De_Bruyne_201807091.jpg"},
+    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Robert_Lewandowski_2020.jpg"},
+    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Mohamed_Salah_2018.jpg"},
+    {"naam": "Neymar Jr", "club": "Al Hilal", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Neymar_in_2018.jpg"},
+    {"naam": "Karim Benzema", "club": "Al-Ittihad", "rating": 89, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Karim_Benzema_2018.jpg"},
+    {"naam": "Harry Kane", "club": "Bayern München", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/89/Harry_Kane_2018.jpg"},
+    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Luka_Modri%C4%87_2018.jpg"},
+    {"naam": "Sergio Ramos", "club": "Sevilla", "rating": 85, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Sergio_Ramos_2017.jpg"},
+    {"naam": "Thibaut Courtois", "club": "Real Madrid", "rating": 89, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Thibaut_Courtois_2018.jpg"},
+    {"naam": "Virgil van Dijk", "club": "Liverpool", "rating": 89, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/1/10/Virgil_van_Dijk_2018.jpg"},
+    {"naam": "Marc-André ter Stegen", "club": "Barcelona", "rating": 88, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Marc-Andr%C3%A9_ter_Stegen_2018.jpg"},
+    {"naam": "Joshua Kimmich", "club": "Bayern München", "rating": 88, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Joshua_Kimmich_2019.jpg"},
+    {"naam": "Jude Bellingham", "club": "Real Madrid", "rating": 86, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Jude_Bellingham_2020.jpg"},
+    {"naam": "Phil Foden", "club": "Manchester City", "rating": 85, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Phil_Foden_2021.jpg"},
+    {"naam": "Vinícius Jr", "club": "Real Madrid", "rating": 86, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Vin%C3%ADcius_J%C3%BAnior_2021.jpg"},
+    {"naam": "Pedri", "club": "Barcelona", "rating": 85, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/1/17/Pedri_2021.jpg"},
+    {"naam": "João Félix", "club": "Barcelona", "rating": 84, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Jo%C3%A3o_F%C3%A9lix_2019.jpg"},
+    {"naam": "Antoine Griezmann", "club": "Atlético Madrid", "rating": 86, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Antoine_Griezmann_2018.jpg"},
+    {"naam": "Frenkie de Jong", "club": "Barcelona", "rating": 86, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Frenkie_de_Jong_2019.jpg"},
+    {"naam": "Mason Mount", "club": "Manchester United", "rating": 83, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Mason_Mount_2020.jpg"},
+    {"naam": "Bruno Fernandes", "club": "Manchester United", "rating": 87, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Bruno_Fernandes_2020.jpg"},
+    {"naam": "Jadon Sancho", "club": "Manchester United", "rating": 84, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Jadon_Sancho_2020.jpg"},
+    {"naam": "Casemiro", "club": "Manchester United", "rating": 88, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/4/44/Casemiro_2018.jpg"},
+    {"naam": "Bernardo Silva", "club": "Manchester City", "rating": 88, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/7/75/Bernardo_Silva_2018.jpg"},
+    {"naam": "Kai Havertz", "club": "Arsenal", "rating": 84, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Kai_Havertz_2020.jpg"},
+    {"naam": "Bukayo Saka", "club": "Arsenal", "rating": 85, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/6/65/Bukayo_Saka_2021.jpg"},
+    # Voeg hier gerust nog 70 spelers toe in ditzelfde formaat...
 ]
+
+
 
 spelers_df = pd.DataFrame(spelers_data)
 
