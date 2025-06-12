@@ -1,143 +1,215 @@
 import streamlit as st
 import pandas as pd
 import random
-import datetime
 
-# ---------------------- SPELERSDATA ----------------------
+# --- Spelerslijst (voorbeeld 10, breid uit tot 100+) ---
 spelers_data = [
-    {"naam": "Lionel Messi", "club": "Inter Miami", "rating": 93, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg"},
-    {"naam": "Cristiano Ronaldo", "club": "Al Nassr", "rating": 92, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"},
-    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Erling_Haaland_Dortmund_2021.jpg"},
-    {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Kylian_Mbapp%C3%A9_2019.jpg"},
-    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/58/Kevin_De_Bruyne_2021.jpg"},
-    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/58/Luka_Modri%C4%87_2018.jpg"},
-    {"naam": "Sergio Ramos", "club": "Sevilla FC", "rating": 86, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Sergio_Ramos_2018.jpg"},
-    {"naam": "Jude Bellingham", "club": "Real Madrid", "rating": 86, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/d/df/Jude_Bellingham_2020.jpg"},
-    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Robert_Lewandowski_2019.jpg"},
-    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/9/96/Mohamed_Salah_2018.jpg"},
-    # Voeg hier 90 extra spelers toe met dezelfde structuur
+    {"naam": "Lionel Messi", "club": "PSG", "rating": 93, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/89/Lionel_Messi_20180626.jpg"},
+    {"naam": "Cristiano Ronaldo", "club": "Manchester United", "rating": 92, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"},
+    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 88, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Erling_Haaland_2019.jpg"},
+    {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Kylian_Mbappe_2021.jpg"},
+    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/53/Kevin_De_Bruyne_201807091.jpg"},
+    {"naam": "Neymar Jr", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/9/99/Neymar_2018.jpg"},
+    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/3/36/Robert_Lewandowski_2019.jpg"},
+    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/0/03/Mohamed_Salah_2018.jpg"},
+    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Luka_Modric_2018.jpg"},
+    {"naam": "Sergio Ramos", "club": "PSG", "rating": 86, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Sergio_Ramos_2018.jpg"},
+    # ... hier kan je aanvullen tot 100+
 ]
 
-spelers_df = pd.DataFrame(spelers_data)
+# Maak uitgebreide lijst inclusief TOTS-versies
+spelers_data_ext = []
+for speler in spelers_data:
+    spelers_data_ext.append({**speler, "is_tots": False})
+    spelers_data_ext.append({
+        **speler,
+        "rating": speler["rating"] + 3,
+        "type": "TOTS",
+        "naam": speler["naam"] + " (TOTS)",
+        "is_tots": True
+    })
 
-# ---------------------- INITIALISATIE ----------------------
+# --- Helper functie voor unieke id ---
+def maak_unieke_id(speler):
+    return f"{speler['naam']}_{speler['club']}"
+
+# --- Init sessie variabelen ---
 if "coins" not in st.session_state:
     st.session_state.coins = 1000
+if "message" not in st.session_state:
+    st.session_state.message = ""
 if "gepackte_spelers" not in st.session_state:
     st.session_state.gepackte_spelers = {}
-if "laatste_bonus" not in st.session_state:
-    st.session_state.laatste_bonus = ""
+if "team" not in st.session_state:
+    st.session_state.team = []
 
-# ---------------------- UI ----------------------
+# --- Titel ---
 st.title("🎮 EAFC Pack Opening Game")
-st.sidebar.title("🛍️ Shop & Coins")
+
+# --- Sidebar: Coins en minigames ---
+st.sidebar.title("🛒 Shop")
 st.sidebar.write(f"💰 Coins: {st.session_state.coins}")
 
-# Dagelijkse bonus
-vandaag = datetime.date.today().isoformat()
-if st.sidebar.button("🎁 Dagelijkse Bonus"):
-    if st.session_state.laatste_bonus != vandaag:
-        st.session_state.coins += 300
-        st.sidebar.success("Je hebt 300 coins ontvangen!")
-        st.session_state.laatste_bonus = vandaag
-    else:
-        st.sidebar.warning("Je hebt vandaag al een bonus gekregen.")
-
-# Kop of munt
 st.sidebar.markdown("---")
-st.sidebar.subheader("🎲 Kop of Munt")
-keuze = st.sidebar.radio("Kies:", ["Kop", "Munt"])
-if st.sidebar.button("Speel!"):
+st.sidebar.subheader("🎲 Minigames om coins te verdienen")
+
+# Minigame 1: Kop of Munt
+st.sidebar.write("1️⃣ Kop of Munt (win 200 coins)")
+keuze = st.sidebar.radio("Kies Kop of Munt:", ["Kop", "Munt"])
+if st.sidebar.button("Speel Kop of Munt"):
     uitkomst = random.choice(["Kop", "Munt"])
     if keuze == uitkomst:
         st.session_state.coins += 200
-        st.sidebar.success(f"🎉 Het was {uitkomst}! Je wint 200 coins!")
+        st.sidebar.success(f"🎉 Je had {uitkomst}! Je wint 200 coins!")
     else:
-        st.sidebar.error(f"😢 Het was {uitkomst}. Geen winst.")
+        st.sidebar.error(f"😢 Het was {uitkomst}. Probeer het nog eens!")
 
-# Quizvraag
+# Minigame 2: Raad het getal (1-5), win 100 coins
+st.sidebar.write("2️⃣ Raad het getal 1-5 (win 100 coins)")
+getal = st.sidebar.number_input("Raad het getal:", min_value=1, max_value=5, step=1, key="raad_getal")
+if st.sidebar.button("Speel Raad het Getal"):
+    random_getal = random.randint(1,5)
+    if getal == random_getal:
+        st.session_state.coins += 100
+        st.sidebar.success(f"🎉 Goed geraden! Het was {random_getal}. Je wint 100 coins!")
+    else:
+        st.sidebar.error(f"Fout! Het was {random_getal}. Probeer opnieuw!")
+
+# Minigame 3: Dobbelsteen (win 50 coins bij 6)
+st.sidebar.write("3️⃣ Dobbelsteen (win 50 coins bij 6)")
+if st.sidebar.button("Gooi Dobbelsteen"):
+    worp = random.randint(1,6)
+    if worp == 6:
+        st.session_state.coins += 50
+        st.sidebar.success("🎉 Je gooide een 6! Je wint 50 coins!")
+    else:
+        st.sidebar.info(f"Je gooide een {worp}. Probeer het nog eens!")
+
 st.sidebar.markdown("---")
-st.sidebar.subheader("🧠 Voetbalquiz")
-vraag, antwoord = "Wie won het WK in 2018?", "Frankrijk"
-antwoord_input = st.sidebar.text_input("Vraag: " + vraag)
-if st.sidebar.button("Beantwoord"):
-    if antwoord_input.strip().lower() == antwoord.lower():
-        st.session_state.coins += 150
-        st.sidebar.success("Goed! Je wint 150 coins.")
-    else:
-        st.sidebar.error("Fout antwoord.")
 
-# ---------------------- PACKS ----------------------
+# --- Packs ---
 pack_types = {
-    "Bronze Pack (200)": {"prijs": 200, "aantal": 2, "min_rating": 75, "tots_kans": 0.01},
-    "Silver Pack (500)": {"prijs": 500, "aantal": 3, "min_rating": 78, "tots_kans": 0.03},
-    "Gold Pack (1000)": {"prijs": 1000, "aantal": 4, "min_rating": 81, "tots_kans": 0.05},
-    "Rare Pack (1500)": {"prijs": 1500, "aantal": 5, "min_rating": 84, "tots_kans": 0.07},
-    "Ultimate Pack (2500)": {"prijs": 2500, "aantal": 7, "min_rating": 85, "tots_kans": 0.1},
+    "Bronze Pack (300) - min rating 80": {"prijs": 300, "aantal": 3, "min_rating": 80},
+    "Silver Pack (600) - min rating 85": {"prijs": 600, "aantal": 4, "min_rating": 85},
+    "Gold Pack (1000) - min rating 88": {"prijs": 1000, "aantal": 5, "min_rating": 88},
+    "Rare Pack (1500) - min rating 90": {"prijs": 1500, "aantal": 6, "min_rating": 90},
+    "Ultimate Pack (3000) - min rating 93": {"prijs": 3000, "aantal": 7, "min_rating": 93},
 }
 
-pack_naam = st.selectbox("📦 Kies een pack", list(pack_types.keys()))
+pack_naam = st.selectbox("Kies een pack", list(pack_types.keys()))
 
-if st.button("🧨 Koop & Open Pack"):
-    pack = pack_types[pack_naam]
-    if st.session_state.coins < pack["prijs"]:
+TOTS_KANS = 0.05  # 5% kans op TOTS
+
+if st.button("Koop & Open Pack"):
+    prijs = pack_types[pack_naam]["prijs"]
+    if st.session_state.coins < prijs:
         st.error("Niet genoeg coins!")
     else:
-        st.session_state.coins -= pack["prijs"]
-        opties = spelers_df[spelers_df["rating"] >= pack["min_rating"]].copy()
-        opties["gewicht"] = opties["rating"].apply(lambda r: 100 - r)
-        gekozen = opties.sample(n=pack["aantal"], weights=opties["gewicht"], replace=False)
+        st.session_state.coins -= prijs
+        # Filter spelers op min rating, geen TOTS pakken hier (komt via kans)
+        opties = [p for p in spelers_data if p["rating"] >= pack_types[pack_naam]["min_rating"]]
+
+        gekozen_spelers = []
+        max_rating = max(p["rating"] for p in opties) if opties else 100
+
+        while len(gekozen_spelers) < pack_types[pack_naam]["aantal"]:
+            # Gewicht: hoe hoger rating, hoe kleiner kans
+            kandidaten = []
+            gewichten = []
+            for p in opties:
+                gewicht = max_rating - p["rating"] + 1
+                kandidaten.append(p)
+                gewichten.append(gewicht)
+            gekozen = random.choices(kandidaten, weights=gewichten, k=1)[0]
+
+            # Check TOTS kans
+            is_tots = random.random() < TOTS_KANS
+            if is_tots:
+                speler = {
+                    **gekozen,
+                    "rating": min(100, gekozen["rating"] + 3),
+                    "naam": gekozen["naam"] + " (TOTS)",
+                    "type": "TOTS",
+                    "is_tots": True,
+                    "afbeelding": gekozen["afbeelding"]
+                }
+            else:
+                speler = {**gekozen, "is_tots": False}
+
+            # Check dubbele
+            unique_id = maak_unieke_id(speler)
+            if unique_id not in st.session_state.gepackte_spelers:
+                st.session_state.gepackte_spelers[unique_id] = speler
+                gekozen_spelers.append(speler)
 
         st.subheader("🎁 Je pack bevat:")
-        for _, speler in gekozen.iterrows():
-            is_tots = random.random() < pack["tots_kans"]
-            naam = speler["naam"] + (" (TOTS)" if is_tots else "")
-            rating = speler["rating"] + 3 if is_tots else speler["rating"]
-            kleur = "blue" if is_tots else "black"
-            unieke_id = speler["naam"] + ("_TOTS" if is_tots else "")
+        for s in gekozen_spelers:
+            kleur = "blue" if s.get("is_tots") else "black"
+            st.markdown(f"<span style='color:{kleur}; font-weight:bold'>{s['naam']} ({s['rating']}) - {s['club']}</span>", unsafe_allow_html=True)
+            st.image(s["afbeelding"], width=100)
 
-            if unieke_id not in st.session_state.gepackte_spelers:
-                st.session_state.gepackte_spelers[unieke_id] = {
-                    "naam": naam,
-                    "club": speler["club"],
-                    "rating": rating,
-                    "type": speler["type"],
-                    "afbeelding": speler["afbeelding"]
-                }
+        # TOTS animatie bij minstens 1 TOTS
+        if any(s.get("is_tots") for s in gekozen_spelers):
+            st.balloons()
+            st.success("✨ Je hebt een TOTS speler gepackt! ✨")
 
-            st.markdown(f"<span style='color:{kleur}'>⭐ {rating} - {naam} ({speler['club']})</span>", unsafe_allow_html=True)
-            if speler["afbeelding"]:
-                st.image(speler["afbeelding"], width=150)
-
-# ---------------------- VERZAMELING ----------------------
-if st.button("📚 Toon Mijn Verzameling"):
-    st.subheader("📦 Je verzameling")
-    for speler in st.session_state.gepackte_spelers.values():
-        kleur = "blue" if "TOTS" in speler["naam"] else "black"
-        st.markdown(f"<span style='color:{kleur}'>⭐ {speler['rating']} - {speler['naam']} ({speler['club']})</span>", unsafe_allow_html=True)
-        if speler["afbeelding"]:
-            st.image(speler["afbeelding"], width=150)
-
-# Reset collectie
-if st.button("🗑️ Reset Verzameling"):
+# --- Bekijk collectie en reset ---
+if st.button("Bekijk mijn collectie"):
+    st.subheader("📦 Mijn collectie:")
+    if not st.session_state.gepackte_spelers:
+        st.write("Je hebt nog geen spelers gepackt.")
+    else:
+        for uid, speler in st.session_state.gepackte_spelers.items():
+            kleur = "blue" if speler.get("is_tots") else "black"
+            st.markdown(f"<span style='color:{kleur}; font-weight:bold'>{speler['naam']} ({speler['rating']}) - {speler['club']}</span>", unsafe_allow_html=True)
+            st.image(speler["afbeelding"], width=80)
+if st.button("Reset mijn collectie"):
     st.session_state.gepackte_spelers = {}
-    st.success("Verzameling is gereset!")
-# --- Ontbrekende spelers ---
-st.markdown("## 📦 Ontbrekende spelers")
+    st.success("Collectie is gereset.")
 
-# Alle unieke IDs uit de volledige lijst
-alle_spelers_ids = {f"{speler['naam']}_{speler['club']}" for speler in spelers_data}
+# --- Welke spelers mis je nog? ---
+def maak_unieke_id_ext(speler):
+    return f"{speler['naam']}_{speler['club']}"
 
-# Unieke IDs van gepackte spelers
-gepackte_ids = set(st.session_state.gepackte_spelers.keys())
+alle_ids = set(maak_unieke_id_ext(s) for s in spelers_data_ext)
+gep_ids = set(st.session_state.gepackte_spelers.keys())
+ontbrekend = alle_ids - gep_ids
+ontbrekende_spelers = [s for s in spelers_data_ext if maak_unieke_id_ext(s) in ontbrekend]
 
-# Bepaal welke je nog mist
-ontbrekende_ids = alle_spelers_ids - gepackte_ids
-ontbrekende_spelers = [
-    speler for speler in spelers_data if f"{speler['naam']}_{speler['club']}" in ontbrekende_ids
-]
+st.subheader(f"🔍 Ontbrekende spelers: {len(ontbrekende_spelers)}")
+for s in ontbrekende_spelers:
+    kleur = "blue" if s.get("is_tots") else "black"
+    st.markdown(f"<span style='color:{kleur};'>🔒 {s['naam']} ({s['rating']}) - {s['club']}</span>", unsafe_allow_html=True)
 
-st.write(f"🧩 Je mist nog {len(ontbrekende_spelers)} kaarten.")
+# --- Team bouwen ---
+st.subheader("⚽ Bouw je team (max 11 spelers)")
 
-for speler in ontbrekende_spelers:
-    st.write(f"🔒 {speler['rating']} - {speler['naam']} ({speler['club']})")
+beschikbare_spelers = list(st.session_state.gepackte_spelers.values())
+
+if not beschikbare_spelers:
+    st.write("Je hebt nog geen spelers om een team te maken.")
+else:
+    namen = [f"{s['naam']} ({s['rating']})" for s in beschikbare_spelers]
+    selectie = st.multiselect("Selecteer spelers voor je team", namen, default=[s['naam']+" ("+str(s['rating'])+")" for s in st.session_state.team])
+
+    # Opslaan geselecteerd team
+    if st.button("Sla team op"):
+        nieuw_team = []
+        naam_rating_map = {f"{s['naam']} ({s['rating']})": s for s in beschikbare_spelers}
+        for naam in selectie:
+            if naam in naam_rating_map:
+                nieuw_team.append(naam_rating_map[naam])
+        if len(nieuw_team) > 11:
+            st.error("Maximaal 11 spelers in je team!")
+        else:
+            st.session_state.team = nieuw_team
+            st.success("Team opgeslagen!")
+
+    if st.session_state.team:
+        st.write("### Jouw team:")
+        cols = st.columns(4)
+        for i, speler in enumerate(st.session_state.team):
+            with cols[i % 4]:
+                kleur = "blue" if speler.get("is_tots") else "black"
+                st.markdown(f"<span style='color:{kleur}; font-weight:bold'>{speler['naam']} ({speler['rating']})</span>", unsafe_allow_html=True)
+                st.image(speler["afbeelding"], width=90)
