@@ -122,3 +122,22 @@ if st.button("📚 Toon Mijn Verzameling"):
 if st.button("🗑️ Reset Verzameling"):
     st.session_state.gepackte_spelers = {}
     st.success("Verzameling is gereset!")
+# --- Ontbrekende spelers ---
+st.markdown("## 📦 Ontbrekende spelers")
+
+# Alle unieke IDs uit de volledige lijst
+alle_spelers_ids = {f"{speler['naam']}_{speler['club']}" for speler in spelers_data}
+
+# Unieke IDs van gepackte spelers
+gepackte_ids = set(st.session_state.gepackte_spelers.keys())
+
+# Bepaal welke je nog mist
+ontbrekende_ids = alle_spelers_ids - gepackte_ids
+ontbrekende_spelers = [
+    speler for speler in spelers_data if f"{speler['naam']}_{speler['club']}" in ontbrekende_ids
+]
+
+st.write(f"🧩 Je mist nog {len(ontbrekende_spelers)} kaarten.")
+
+for speler in ontbrekende_spelers:
+    st.write(f"🔒 {speler['rating']} - {speler['naam']} ({speler['club']})")
