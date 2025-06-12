@@ -1,159 +1,119 @@
 import streamlit as st
 import pandas as pd
 import random
+import time
 
-# --- Spelersdata met echte afbeeldingen ---
+# --- SPELERSDATA (voorbeeld: eerste 10, jij kan uitbreiden tot 100) ---
 spelers_data = [
     {"naam": "Lionel Messi", "club": "Inter Miami", "rating": 93, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/89/Lionel_Messi_20180626.jpg"},
     {"naam": "Cristiano Ronaldo", "club": "Al-Nassr", "rating": 92, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"},
     {"naam": "Kylian Mbappé", "club": "PSG", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Kylian_Mbapp%C3%A9_2019.jpg"},
-    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/55/Erling_Haaland_2021.jpg"},
-    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Kevin_De_Bruyne_201807091.jpg"},
-    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Robert_Lewandowski_2020.jpg"},
-    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Mohamed_Salah_2018.jpg"},
-    {"naam": "Neymar Jr", "club": "Al Hilal", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Neymar_in_2018.jpg"},
-    {"naam": "Karim Benzema", "club": "Al-Ittihad", "rating": 89, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Karim_Benzema_2018.jpg"},
-    {"naam": "Harry Kane", "club": "Bayern München", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/89/Harry_Kane_2018.jpg"},
-    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 87, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Luka_Modri%C4%87_2018.jpg"},
-    {"naam": "Sergio Ramos", "club": "Sevilla", "rating": 85, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Sergio_Ramos_2017.jpg"},
-    {"naam": "Thibaut Courtois", "club": "Real Madrid", "rating": 89, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Thibaut_Courtois_2018.jpg"},
-    {"naam": "Virgil van Dijk", "club": "Liverpool", "rating": 89, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/1/10/Virgil_van_Dijk_2018.jpg"},
-    {"naam": "Marc-André ter Stegen", "club": "Barcelona", "rating": 88, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Marc-Andr%C3%A9_ter_Stegen_2018.jpg"},
-    {"naam": "Joshua Kimmich", "club": "Bayern München", "rating": 88, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Joshua_Kimmich_2019.jpg"},
-    {"naam": "Jude Bellingham", "club": "Real Madrid", "rating": 86, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Jude_Bellingham_2020.jpg"},
-    {"naam": "Phil Foden", "club": "Manchester City", "rating": 85, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Phil_Foden_2021.jpg"},
-    {"naam": "Vinícius Jr", "club": "Real Madrid", "rating": 86, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Vin%C3%ADcius_J%C3%BAnior_2021.jpg"},
-    {"naam": "Pedri", "club": "Barcelona", "rating": 85, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/1/17/Pedri_2021.jpg"},
-    {"naam": "João Félix", "club": "Barcelona", "rating": 84, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Jo%C3%A3o_F%C3%A9lix_2019.jpg"},
-    {"naam": "Antoine Griezmann", "club": "Atlético Madrid", "rating": 86, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Antoine_Griezmann_2018.jpg"},
-    {"naam": "Frenkie de Jong", "club": "Barcelona", "rating": 86, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Frenkie_de_Jong_2019.jpg"},
-    {"naam": "Mason Mount", "club": "Manchester United", "rating": 83, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Mason_Mount_2020.jpg"},
-    {"naam": "Bruno Fernandes", "club": "Manchester United", "rating": 87, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Bruno_Fernandes_2020.jpg"},
-    {"naam": "Jadon Sancho", "club": "Manchester United", "rating": 84, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Jadon_Sancho_2020.jpg"},
-    {"naam": "Casemiro", "club": "Manchester United", "rating": 88, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/4/44/Casemiro_2018.jpg"},
-    {"naam": "Bernardo Silva", "club": "Manchester City", "rating": 88, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/7/75/Bernardo_Silva_2018.jpg"},
-    {"naam": "Kai Havertz", "club": "Arsenal", "rating": 84, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Kai_Havertz_2020.jpg"},
-    {"naam": "Bukayo Saka", "club": "Arsenal", "rating": 85, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/6/65/Bukayo_Saka_2021.jpg"},
-    # Voeg hier gerust nog 70 spelers toe in ditzelfde formaat...
+    {"naam": "Kevin De Bruyne", "club": "Manchester City", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Kevin_De_Bruyne_2021.jpg"},
+    {"naam": "Erling Haaland", "club": "Manchester City", "rating": 90, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Erling_Haaland_2022.jpg"},
+    {"naam": "Luka Modrić", "club": "Real Madrid", "rating": 88, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/6/63/Luka_Modri%C4%87_2018.jpg"},
+    {"naam": "Sergio Ramos", "club": "Sevilla", "rating": 86, "type": "Gold", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Sergio_Ramos_2017.jpg"},
+    {"naam": "Neymar Jr", "club": "Al-Hilal", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Neymar_WC2018.jpg"},
+    {"naam": "Mohamed Salah", "club": "Liverpool", "rating": 90, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Mohamed_Salah_2018.jpg"},
+    {"naam": "Robert Lewandowski", "club": "Barcelona", "rating": 91, "type": "Gold Rare", "afbeelding": "https://upload.wikimedia.org/wikipedia/commons/5/59/Lewandowski-Bayern-2020.jpg"},
+    # Voeg hier nog 90 spelers toe in hetzelfde formaat
 ]
-
-
 
 spelers_df = pd.DataFrame(spelers_data)
 
-# --- Init session state ---
+# --- INITIËLE STATUS ---
 if "coins" not in st.session_state:
     st.session_state.coins = 1000
 if "gepackte_spelers" not in st.session_state:
     st.session_state.gepackte_spelers = {}
-if "team" not in st.session_state:
-    st.session_state.team = []
 if "message" not in st.session_state:
     st.session_state.message = ""
 
+# --- TITEL ---
 st.title("🎮 EAFC Pack Opening Game")
+
+# --- SIDEBAR ---
 st.sidebar.title("🛒 Shop")
 st.sidebar.write(f"💰 Coins: {st.session_state.coins}")
 
-# --- Minigame: Kop of Munt ---
+# Minigame
+st.sidebar.markdown("---")
 st.sidebar.subheader("🎲 Minigame: Kop of Munt")
-keuze = st.sidebar.radio("Kies Kop of Munt:", ["Kop", "Munt"])
+keuze = st.sidebar.radio("Kies:", ["Kop", "Munt"])
 if st.sidebar.button("Speel"):
     uitkomst = random.choice(["Kop", "Munt"])
     if keuze == uitkomst:
-        winst = 200
-        st.session_state.coins += winst
-        st.session_state.message = f"🎉 Je had {uitkomst}! Je wint {winst} coins!"
+        st.session_state.coins += 200
+        st.session_state.message = f"🎉 Het was {uitkomst}! Je wint 200 coins."
     else:
-        st.session_state.message = f"😢 Het was {uitkomst}. Probeer het nog eens!"
+        st.session_state.message = f"😢 Het was {uitkomst}. Geen winst."
 st.sidebar.write(st.session_state.message)
 
-# --- Packs ---
+# Packs
 pack_types = {
     "Gold Pack (500)": {"prijs": 500, "aantal": 3, "types": ["Gold", "Gold Rare"]},
     "Rare Pack (1000)": {"prijs": 1000, "aantal": 5, "types": ["Gold Rare"]},
 }
+
+pack_naam = st.sidebar.selectbox("Kies een pack", list(pack_types.keys()))
 TOTS_KANS = 0.05
 
-st.sidebar.markdown("---")
-st.sidebar.subheader("🎁 Packs")
-pack_naam = st.sidebar.selectbox("Kies een pack", list(pack_types.keys()))
-
+# --- PACK OPENEN ---
 if st.sidebar.button("Koop & Open Pack"):
     prijs = pack_types[pack_naam]["prijs"]
     if st.session_state.coins >= prijs:
         st.session_state.coins -= prijs
         opties = spelers_df[spelers_df["type"].isin(pack_types[pack_naam]["types"])].copy()
-        max_rating = opties["rating"].max()
-        opties["gewicht"] = max_rating - opties["rating"] + 1
-        gekozen = opties.sample(
-            n=pack_types[pack_naam]["aantal"],
-            weights=opties["gewicht"],
-            replace=False
-        )
+        opties["gewicht"] = opties["rating"].apply(lambda r: max(1, 100 - r))  # hoe hoger, hoe zeldzamer
+        gekozen = opties.sample(n=pack_types[pack_naam]["aantal"], weights=opties["gewicht"])
 
-        st.subheader("📦 Je pack bevat:")
+        st.subheader("🎁 Je pack bevat:")
         for _, speler in gekozen.iterrows():
+            unieke_id = speler['naam']
             is_tots = random.random() < TOTS_KANS
-            unieke_id = f"{speler['naam']}_TOTS" if is_tots else speler['naam']
+            rating = speler['rating'] + 3 if is_tots else speler['rating']
+            naam = f"{speler['naam']} (TOTS)" if is_tots else speler['naam']
+            kleur = "blue" if is_tots else "black"
 
+            # TOTS animatie
+            if is_tots:
+                with st.spinner("✨ Je hebt een TOTS..."):
+                    time.sleep(1)
+
+            st.markdown(f"<span style='color:{kleur};'>⭐ {rating} - {naam} ({speler['club']})</span>", unsafe_allow_html=True)
+            if pd.notna(speler["afbeelding"]):
+                st.image(speler["afbeelding"], width=150)
+
+            # Toevoegen aan collectie
             if unieke_id not in st.session_state.gepackte_spelers:
                 st.session_state.gepackte_spelers[unieke_id] = {
-                    "naam": speler["naam"],
+                    "naam": naam,
                     "club": speler["club"],
-                    "rating": speler["rating"] + 3 if is_tots else speler["rating"],
-                    "type": speler["type"] + (" TOTS" if is_tots else ""),
-                    "afbeelding": speler["afbeelding"]
+                    "rating": rating,
+                    "afbeelding": speler["afbeelding"],
+                    "is_tots": is_tots
                 }
-
-            kaart = st.session_state.gepackte_spelers[unieke_id]
-            kleur = "blue" if "TOTS" in kaart["type"] else "black"
-            st.markdown(f"<span style='color:{kleur}; font-size:18px;'>⭐ {kaart['rating']} - {kaart['naam']} ({kaart['club']}) - {kaart['type']}</span>", unsafe_allow_html=True)
-            st.image(kaart["afbeelding"], width=150)
-            if "TOTS" in kaart["type"]:
-                st.markdown("<h3 style='color:blue;'>✨ TOTS ANIMATIE ✨</h3>", unsafe_allow_html=True)
     else:
         st.error("Niet genoeg coins!")
 
-# --- Verzameling ---
-st.markdown("---")
-if st.button("📂 Toon verzameling"):
-    st.subheader("📦 Gepackte spelers")
-    for kaart in st.session_state.gepackte_spelers.values():
-        kleur = "blue" if "TOTS" in kaart["type"] else "black"
-        st.markdown(f"<span style='color:{kleur}; font-size:16px;'>⭐ {kaart['rating']} - {kaart['naam']} ({kaart['club']}) - {kaart['type']}</span>", unsafe_allow_html=True)
-        st.image(kaart["afbeelding"], width=100)
+# --- GEPAACKTE SPELERS TONEN ---
+if st.button("📦 Toon Mijn Verzameling"):
+    verzameling = st.session_state.gepackte_spelers
+    st.subheader(f"📋 Verzameling ({len(verzameling)} / {len(spelers_df)})")
+    for speler in verzameling.values():
+        kleur = "blue" if speler["is_tots"] else "black"
+        st.markdown(f"<span style='color:{kleur};'>⭐ {speler['rating']} - {speler['naam']} ({speler['club']})</span>", unsafe_allow_html=True)
+        if speler["afbeelding"]:
+            st.image(speler["afbeelding"], width=150)
 
-# --- Resetknop ---
-if st.button("🔄 Reset verzameling"):
+# --- RESETKNOP ---
+if st.button("❌ Reset mijn verzameling"):
     st.session_state.gepackte_spelers = {}
-    st.session_state.team = []
-    st.success("Verzameling is gereset!")
+    st.success("Je verzameling is gereset!")
 
-# --- Ontbrekende kaarten ---
-st.markdown("---")
-if st.button("🔍 Toon ontbrekende kaarten"):
-    gepackt = {sp["naam"] for sp in st.session_state.gepackte_spelers.values()}
-    ontbrekend = [sp for sp in spelers_data if sp["naam"] not in gepackt]
-    st.subheader(f"📋 Nog te verzamelen kaarten ({len(ontbrekend)})")
-    for speler in ontbrekend:
-        st.write(f"🔸 {speler['naam']} ({speler['club']})")
-
-# --- Team builder ---
-st.markdown("---")
-st.subheader("⚽ Bouw je team")
-team = st.session_state.team
-keuze_spelers = [sp["naam"] for sp in st.session_state.gepackte_spelers.values() if sp["naam"] not in team]
-gekozen = st.selectbox("Kies een speler om toe te voegen aan je team", ["-"] + keuze_spelers)
-
-if gekozen != "-" and len(team) < 11:
-    team.append(gekozen)
-    st.success(f"✅ {gekozen} toegevoegd aan je team!")
-
-if team:
-    st.write(f"👥 Je team ({len(team)}/11):")
-    for naam in team:
-        st.write(f"- {naam}")
-
-if len(team) >= 11:
-    st.success("🎉 Je team is compleet!")
+# --- NOG TE VERZAMELEN ---
+if st.button("🔍 Wat mis ik nog?"):
+    gepackte_namen = set(st.session_state.gepackte_spelers.keys())
+    ontbrekend = spelers_df[~spelers_df["naam"].isin(gepackte_namen)]
+    st.subheader(f"📉 Nog te verzamelen: {len(ontbrekend)} kaarten")
+    for _, speler in ontbrekend.iterrows():
+        st.write(f"🔲 {speler['naam']} ({speler['club']})")
